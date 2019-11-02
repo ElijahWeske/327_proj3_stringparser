@@ -61,11 +61,12 @@ int StringParserClass::setTags(const char *pStart, const char *pEnd) {
 //ERROR_TAGS_NULL if either pStart or pEnd is null
 //ERROR_DATA_NULL pDataToSearchThru is null
 int StringParserClass::getDataBetweenTags(char *pDataToSearchThru, std::vector<std::string> &myVector) {
-	int pDataSize;
-	char *startSearchTag;
-	char *endSearchTag;
-	char *startEndTag;
-	char *endEndTag;
+	int dataSize;
+	int startSize;
+	int loopTracker;
+	char *tempStart;
+	char *tempEnd;
+	string tagData;
 
 	myVector.clear();
 
@@ -77,14 +78,27 @@ int StringParserClass::getDataBetweenTags(char *pDataToSearchThru, std::vector<s
 		return ERROR_DATA_NULL;
 	}
 
-	pDataSize = strlen(pDataToSearchThru);
-	*startSearchTag = pDataToSearchThru;
-	*endSearchTag = pDataToSearchThru + pDataSize;
-	*startEndTag = pDataToSearchThru;
-	*endEndTag = pDataTosearchThru + pDataSize;
+	dataSize = strlen(pDataToSearchThru);
+	dataHolder = pDataToSearchThru;
+	startSize = strlen(pStartTag);
+	*tempStart = pStartTag;
+	*tempEnd = pEndTag;
 
-	//TODO: Finish function
+	dataHolder = dataHolder + dataSize;
+	loopTracker = findTag(pStartTag, dataHolder, tempEnd);
 
+	while (loopTracker == SUCCESS){
+		tagData = "";
+			while (dataHolder != tempEnd){
+				tagData = tagData + dataHolder;
+				dataHolder++;
+			}
+			loopTracker = findTag(pStartTag, dataHolder, tempEnd);
+
+			myVector.push_back(tagData);
+			dataHolder = dataHolder + dataSize;
+	}
+	pDataToSearchThru = dataHolder;
 	return SUCCESS;
 }
 
@@ -112,12 +126,14 @@ int StringParserClass::findTag(char *pTagToLookFor, char *&pStart,char *&pEnd) {
 		return ERROR_TAGS_NULL;
 	}
 
-	startLen = (strlen(pStart) + 1);
-	endLen = (strlen(pEnd) + 1);
+	//Not using these...
+	startLen = strlen(pStart) + 1;
+	endLen = strlen(pEnd) + 1;
 
 	while (pStart != pEnd){
 		if (*pStart == *pTagToLookFor){
 			if (strncmp(pStart, pTagToLookFor, strlen(pTagToLookFor)) == SUCCESS){
+				pEnd = pStart + strlen(pTagToLookFor);
 				return SUCCESS;
 			}
 		}
@@ -125,4 +141,5 @@ int StringParserClass::findTag(char *pTagToLookFor, char *&pStart,char *&pEnd) {
 	}
 	return FAIL;
 }
+
 
