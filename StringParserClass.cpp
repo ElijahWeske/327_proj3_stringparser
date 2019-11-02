@@ -112,8 +112,8 @@ int StringParserClass::findTag(char *pTagToLookFor, char *&pStart,char *&pEnd) {
 		return ERROR_TAGS_NULL;
 	}
 
-	startLen = strlen(pStart);
-	endLen = strlen(pEnd);
+	startLen = (strlen(pStart) + 1);
+	endLen = (strlen(pEnd) + 1);
 
 	while (pStart != pEnd){
 		if (*pStart == *pTagToLookFor){
